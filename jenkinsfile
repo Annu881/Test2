@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        maven 'maven'  // Use the exact name you set in Global Tool Configuration
+        maven 'maven'  
     }
     stages {
         stage('Build') {
@@ -14,5 +14,29 @@ pipeline {
                 sh 'mvn test'
             }
         }
+stages {
+        stage('Checkout') {
+            steps {
+                git url:https://github.com/Annu881/Test2.git , branch: master
+            }
+        }
+
     }
 }
+
+
+stage('Custom Function') {
+            steps {
+                script {
+                    def customFunction = { message ->
+                        def result = "Processing: ${message}"
+                        return result
+                    }
+                    
+                    def output = customFunction("Build artifact ready")
+                    // Using sh to print without echo command
+                    sh "printf '${output}\n'"
+                }
+            }
+        }
+    }
